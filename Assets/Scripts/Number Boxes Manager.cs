@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NumberBoxesManager : MonoBehaviour
 {
+    public int difficultyLevel;
+
     [Header("Number Boxes")]
     [SerializeField] private List<InputNumberBox> inputs;
     [SerializeField] private List<OutputNumberBox> outputs;
@@ -22,8 +24,8 @@ public class NumberBoxesManager : MonoBehaviour
         inputs = new List<InputNumberBox>();
         outputs = new List<OutputNumberBox>();
 
-        // test level 2 hack
-        InitBoxes(2);
+        // test set up of number boxes
+        InitBoxes(difficultyLevel);
     }
 
     /// <summary>
