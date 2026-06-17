@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class InputNumberBox : MonoBehaviour, IPointerClickHandler
 {
-    public int Number { get; private set; }
+    [field: SerializeField] public int Number { get; private set; }
     [SerializeField] private TextMeshProUGUI numberText;
 
     // Start is called before the first frame update
