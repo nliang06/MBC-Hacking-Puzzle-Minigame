@@ -28,6 +28,12 @@ public class NumberBoxesManager : MonoBehaviour
         InitBoxes(difficultyLevel);
     }
 
+    private void OnEnable()
+    {
+        // Observe input number boxes for when to update the ouputs
+        InputNumberBox.onChangeNumber += CalculateOuput;
+    }
+
     /// <summary>
     /// Initialize layout for the given difficulty level
     /// </summary>
@@ -52,6 +58,17 @@ public class NumberBoxesManager : MonoBehaviour
     /// </summary>
     public void CalculateOuput()
     {
-        // TODO: calculate and update output from the current set of inputs
+        // Calculate and update output from the current set of inputs
+        int output1 = 0;
+        int output2 = 0;
+
+        for (int i = 0; i < inputs.Count; i++)
+        {
+            output1 += inputs[i].Number;
+            output2 += inputs[i].Number;
+        }
+
+        outputs[0].UpdateOutput(output1);
+        outputs[1].UpdateOutput(output2);
     }
 }

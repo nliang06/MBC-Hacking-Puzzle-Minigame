@@ -258,6 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aa123c8bbf291459e43f1c79259d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  difficultyLevel: 2
   inputs: []
   outputs: []
   inputsLayout: {fileID: 756245362}

@@ -9,6 +9,9 @@ public class InputNumberBox : MonoBehaviour, IPointerClickHandler
     [field: SerializeField] public int Number { get; private set; }
     [SerializeField] private TextMeshProUGUI numberText;
 
+    public delegate void OnChangeNumber();
+    public static event OnChangeNumber onChangeNumber;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,7 @@ public class InputNumberBox : MonoBehaviour, IPointerClickHandler
             Number++;
         }
         numberText.text = Number.ToString();
+        onChangeNumber?.Invoke();
     }
 
     /// <summary>
@@ -48,6 +52,7 @@ public class InputNumberBox : MonoBehaviour, IPointerClickHandler
             Number--;
         }
         numberText.text = Number.ToString();
+        onChangeNumber?.Invoke();
     }
 
     /// <summary>
