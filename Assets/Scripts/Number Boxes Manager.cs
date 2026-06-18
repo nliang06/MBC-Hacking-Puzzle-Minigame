@@ -9,20 +9,27 @@ public class NumberBoxesManager : MonoBehaviour
     [Header("Number Boxes")]
     [SerializeField] private List<InputNumberBox> inputs;
     [SerializeField] private List<OutputNumberBox> outputs;
+    [SerializeField] private int answer1;
+    [SerializeField] private int answer2;
 
     [Header("References")]
     [SerializeField] private GameObject inputsLayout;
     [SerializeField] private GameObject ouputsLayout;
+    [SerializeField] private GameObject answersLayout;
 
     [Header("Prefabs")]
     [SerializeField] private InputNumberBox inputPrefab;
     [SerializeField] private OutputNumberBox outputPrefab;
+    [SerializeField] private NumberBox answerPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         inputs = new List<InputNumberBox>();
         outputs = new List<OutputNumberBox>();
+
+        answer1 = 0;
+        answer2 = 0;
 
         // test set up of number boxes
         InitBoxes(difficultyLevel);
@@ -51,6 +58,11 @@ public class NumberBoxesManager : MonoBehaviour
             OutputNumberBox newOutput = Instantiate(outputPrefab, ouputsLayout.transform);
             outputs.Add(newOutput);
         }
+
+        for (int i = 0; i < 2; i++)
+        {
+            NumberBox newAnswer = Instantiate(answerPrefab, answersLayout.transform);
+        }
     }
 
     /// <summary>
@@ -64,11 +76,18 @@ public class NumberBoxesManager : MonoBehaviour
 
         for (int i = 0; i < inputs.Count; i++)
         {
-            output1 += inputs[i].Number;
-            output2 += inputs[i].Number;
+            output1 += inputs[i].Number; // stub
+            output2 += inputs[i].Number; // stub
         }
 
         outputs[0].UpdateOutput(output1);
         outputs[1].UpdateOutput(output2);
+
+        // Check if outputs match the answers
+        if (output1 == answer1 && output2 == answer2)
+        {
+            // Trigger win
+            Debug.Log("Solved");
+        }
     }
 }

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
-public class OutputNumberBox : NumberBox
+public class NumberBox : MonoBehaviour
 {
+    [field: SerializeField] public int Number { get; protected set; }
+    [SerializeField] protected TextMeshProUGUI numberText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -12,7 +15,7 @@ public class OutputNumberBox : NumberBox
         numberText.text = Number.ToString();
     }
 
-    public void UpdateOutput(int num)
+    public void UpdateNumber(int num)
     {
         Number = num;
         numberText.text = Number.ToString();

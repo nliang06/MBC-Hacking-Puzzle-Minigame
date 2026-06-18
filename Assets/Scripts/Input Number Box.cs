@@ -4,11 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputNumberBox : MonoBehaviour, IPointerClickHandler
+public class InputNumberBox : NumberBox, IPointerClickHandler
 {
-    [field: SerializeField] public int Number { get; private set; }
-    [SerializeField] private TextMeshProUGUI numberText;
-
     public delegate void OnChangeNumber();
     public static event OnChangeNumber onChangeNumber;
 
