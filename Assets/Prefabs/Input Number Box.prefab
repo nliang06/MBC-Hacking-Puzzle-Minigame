@@ -280,4 +280,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00eec77af2696da4dbcf5c1514034893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Number>k__BackingField: 0
   numberText: {fileID: 1809405989842876215}

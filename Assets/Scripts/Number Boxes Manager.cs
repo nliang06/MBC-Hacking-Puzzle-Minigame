@@ -22,7 +22,7 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private string formula1;
     [SerializeField] private string formula2;
 
-    [Header("References")]
+    [Header("Layout Groups")]
     [SerializeField] private GameObject inputsLayout;
     [SerializeField] private GameObject ouputsLayout;
     [SerializeField] private GameObject answersLayout;
@@ -31,6 +31,9 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private InputNumberBox inputPrefab;
     [SerializeField] private OutputNumberBox outputPrefab;
     [SerializeField] private OutputNumberBox answerPrefab;
+
+    [Header("SFX")]
+    [SerializeField] private AudioClip victorySFX;
 
     // Start is called before the first frame update
     void Start()
@@ -148,6 +151,7 @@ public class NumberBoxesManager : MonoBehaviour
     /// </summary>
     public void CalculateOuput()
     {
+        AudioManager.instance.PlayButtonClickSound();
         // Use first variable (i.e A) as starting value
         int output1 = inputs[0].Number;
         int output2 = inputs[0].Number;
@@ -167,7 +171,7 @@ public class NumberBoxesManager : MonoBehaviour
         if (output1 == answer1 && output2 == answer2)
         {
             // Trigger win
-            Debug.Log("Solved");
+            AudioManager.instance.PlaySoundFX(victorySFX, transform, 0.7f);
         }
     }
 
