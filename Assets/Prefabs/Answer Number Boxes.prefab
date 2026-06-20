@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 7020150866601353368}
   - component: {fileID: 7588866963750044232}
   - component: {fileID: 4890258535545413817}
-  - component: {fileID: 3440338833437593496}
+  - component: {fileID: 4724998126360628653}
   m_Layer: 5
   m_Name: Answer Number Boxes
   m_TagString: Untagged
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3440338833437593496
+--- !u!114 &4724998126360628653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4733060364479383454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6df8e1b78995bb4f9ecbe8be181866a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e48c9339f51229479203199486c4d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Number>k__BackingField: 0

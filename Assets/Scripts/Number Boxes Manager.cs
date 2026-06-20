@@ -9,6 +9,7 @@ public class NumberBoxesManager : MonoBehaviour
     [Header("Number Boxes")]
     [SerializeField] private List<InputNumberBox> inputs;
     [SerializeField] private List<OutputNumberBox> outputs;
+    [SerializeField] private List<OutputNumberBox> answers;
     [SerializeField] private int answer1;
     [SerializeField] private int answer2;
 
@@ -16,9 +17,10 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private List<int> correctNums;
     private List<char> formula1List;
     private List<char> formula2List;
+    [SerializeField] private List<char> operations1;
+    [SerializeField] private List<char> operations2;
     [SerializeField] private string formula1;
     [SerializeField] private string formula2;
-
 
     [Header("References")]
     [SerializeField] private GameObject inputsLayout;
@@ -28,19 +30,19 @@ public class NumberBoxesManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private InputNumberBox inputPrefab;
     [SerializeField] private OutputNumberBox outputPrefab;
-    [SerializeField] private NumberBox answerPrefab;
+    [SerializeField] private OutputNumberBox answerPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         inputs = new List<InputNumberBox>();
         outputs = new List<OutputNumberBox>();
+        answers = new List<OutputNumberBox>();
         correctNums = new List<int>();
         formula1List = new List<char>();
         formula2List = new List<char>();
-
-        answer1 = 0;
-        answer2 = 0;
+        operations1 = new List<char>();
+        operations2 = new List<char>();
 
         // test set up of number boxes
         InitBoxes(difficultyLevel);
@@ -72,7 +74,8 @@ public class NumberBoxesManager : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
-            NumberBox newAnswer = Instantiate(answerPrefab, answersLayout.transform);
+            OutputNumberBox newAnswer = Instantiate(answerPrefab, answersLayout.transform);
+            answers.Add(newAnswer);
         }
 
         GenerateFormulas(difficulty);
@@ -84,8 +87,6 @@ public class NumberBoxesManager : MonoBehaviour
     /// <param name="difficulty"></param>
     private void GenerateFormulas(int difficulty)
     {
-        char[] operations = { '+', '-', '*' };
-
         // Generate random nums for the correct inputs
         for (int i = 0; i < difficulty + 1; i++)
         {
@@ -93,7 +94,9 @@ public class NumberBoxesManager : MonoBehaviour
             correctNums.Add(num);
         }
 
-        for (int i = 0; i < difficulty; i++)
+        char[] operations = { '+', '-', '*' };
+
+        for (int i = 0; i < difficulty + 1; i++)
         {
             // Add variable to formula string
             char variable = (char)((int)'A' + i);
@@ -101,18 +104,43 @@ public class NumberBoxesManager : MonoBehaviour
             formula2List.Add(variable);
 
             // Stops adding unnecessary operator after last variable
-            if (i == difficulty - 1) break;
+            if (i == difficulty) break;
 
             // Add random operation after variable and re-randomize for the 2nd formula
             char operation = operations[Random.Range(0, operations.Length)];
             formula1List.Add(operation);
+            operations1.Add(operation);
+
             operation = operations[Random.Range(0, operations.Length)];
             formula2List.Add(operation);
+            operations2.Add(operation);
         }
 
         // Concentate formulas into strings
         formula1 = string.Join(" ", formula1List);
         formula2 = string.Join(" ", formula2List);
+
+        CalculateAnswers();
+    }
+
+    /// <summary>
+    /// Private helper to calculate answers for the generated variables and formula
+    /// </summary>
+    private void CalculateAnswers()
+    {
+        // Use first variable (i.e A) as starting value
+        answer1 = correctNums[0];
+        answer2 = correctNums[0];
+
+        // Applies operations left to right (so no BEDMAS) according to operations lists for the 2 formulas
+        for (int i = 0; i < correctNums.Count - 1; i++)
+        {
+            answer1 = ApplyOperation(correctNums[i + 1], answer1, operations1[i]);
+            answer2 = ApplyOperation(correctNums[i + 1], answer2, operations2[i]);
+        }
+
+        answers[0].UpdateNumber(answer1);
+        answers[1].UpdateNumber(answer2);
     }
 
     /// <summary>
@@ -120,24 +148,49 @@ public class NumberBoxesManager : MonoBehaviour
     /// </summary>
     public void CalculateOuput()
     {
-        // Calculate and update output from the current set of inputs
-        int output1 = 0;
-        int output2 = 0;
+        // Use first variable (i.e A) as starting value
+        int output1 = inputs[0].Number;
+        int output2 = inputs[0].Number;
 
-        for (int i = 0; i < inputs.Count; i++)
+        // Applies operations left to right (so no BEDMAS) according to operations lists for the 2 formulas
+        for (int i = 0; i < inputs.Count - 1; i++)
         {
-            output1 += inputs[i].Number; // stub
-            output2 += inputs[i].Number; // stub
+            output1 = ApplyOperation(inputs[i + 1].Number, output1, operations1[i]);
+            output2 = ApplyOperation(inputs[i + 1].Number, output2, operations2[i]);
         }
 
-        outputs[0].UpdateOutput(output1);
-        outputs[1].UpdateOutput(output2);
+        // Update visuals
+        outputs[0].UpdateNumber(output1);
+        outputs[1].UpdateNumber(output2);
 
         // Check if outputs match the answers
         if (output1 == answer1 && output2 == answer2)
         {
             // Trigger win
             Debug.Log("Solved");
+        }
+    }
+
+    /// <summary>
+    /// Private helper to read the operations lists and apply them, then returns result
+    /// </summary>
+    /// <param name="variable">variable to apply operation to</param>
+    /// <param name="resultSoFar">result from previous operations</param>
+    /// <param name="operation">the operation to apply</param>
+    /// <returns></returns>
+    private int ApplyOperation(int variable, int resultSoFar, char operation)
+    {
+        switch(operation)
+        {
+            case '+':
+                return resultSoFar + variable;
+            case '-':
+                return resultSoFar - variable;
+            case '*':
+                return resultSoFar * variable;
+            default:
+                Debug.Log("Invalid operation");
+                return 0;
         }
     }
 }

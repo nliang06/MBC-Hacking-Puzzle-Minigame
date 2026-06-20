@@ -8,13 +8,6 @@ public class OutputNumberBox : NumberBox
     // Start is called before the first frame update
     void Start()
     {
-        Number = 0;
-        numberText.text = Number.ToString();
-    }
 
-    public void UpdateOutput(int num)
-    {
-        Number = num;
-        numberText.text = Number.ToString();
     }
 }

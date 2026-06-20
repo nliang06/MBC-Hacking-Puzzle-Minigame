@@ -258,12 +258,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49aa123c8bbf291459e43f1c79259d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultyLevel: 4
+  difficultyLevel: 10
   inputs: []
   outputs: []
+  answers: []
   answer1: 0
   answer2: 0
   correctNums: 
+  operations1: 
+  operations2: 
   formula1: 
   formula2: 
   inputsLayout: {fileID: 756245362}
@@ -271,7 +274,7 @@ MonoBehaviour:
   answersLayout: {fileID: 1322216620}
   inputPrefab: {fileID: 1418647726899404879, guid: 62483409c64fa14489f5fd1f53cfd392, type: 3}
   outputPrefab: {fileID: -3167584467817260149, guid: de6cc3a1cadc7bc46a8033a8576fa8e1, type: 3}
-  answerPrefab: {fileID: 3440338833437593496, guid: 100176a46c0fd374abc91356e0da7402, type: 3}
+  answerPrefab: {fileID: 4724998126360628653, guid: 100176a46c0fd374abc91356e0da7402, type: 3}
 --- !u!1 &732826566
 GameObject:
   m_ObjectHideFlags: 0
