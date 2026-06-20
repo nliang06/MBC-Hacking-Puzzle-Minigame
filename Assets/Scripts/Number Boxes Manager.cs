@@ -12,6 +12,14 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private int answer1;
     [SerializeField] private int answer2;
 
+    [Header("Formulas Info")]
+    [SerializeField] private List<int> correctNums;
+    private List<char> formula1List;
+    private List<char> formula2List;
+    [SerializeField] private string formula1;
+    [SerializeField] private string formula2;
+
+
     [Header("References")]
     [SerializeField] private GameObject inputsLayout;
     [SerializeField] private GameObject ouputsLayout;
@@ -27,6 +35,9 @@ public class NumberBoxesManager : MonoBehaviour
     {
         inputs = new List<InputNumberBox>();
         outputs = new List<OutputNumberBox>();
+        correctNums = new List<int>();
+        formula1List = new List<char>();
+        formula2List = new List<char>();
 
         answer1 = 0;
         answer2 = 0;
@@ -63,6 +74,45 @@ public class NumberBoxesManager : MonoBehaviour
         {
             NumberBox newAnswer = Instantiate(answerPrefab, answersLayout.transform);
         }
+
+        GenerateFormulas(difficulty);
+    }
+
+    /// <summary>
+    /// Randomly generates the 2 formulas that produce the 2 target outputs according to given difficulty
+    /// </summary>
+    /// <param name="difficulty"></param>
+    private void GenerateFormulas(int difficulty)
+    {
+        char[] operations = { '+', '-', '*' };
+
+        // Generate random nums for the correct inputs
+        for (int i = 0; i < difficulty + 1; i++)
+        {
+            int num = Random.Range(0, 9);
+            correctNums.Add(num);
+        }
+
+        for (int i = 0; i < difficulty; i++)
+        {
+            // Add variable to formula string
+            char variable = (char)((int)'A' + i);
+            formula1List.Add(variable);
+            formula2List.Add(variable);
+
+            // Stops adding unnecessary operator after last variable
+            if (i == difficulty - 1) break;
+
+            // Add random operation after variable and re-randomize for the 2nd formula
+            char operation = operations[Random.Range(0, operations.Length)];
+            formula1List.Add(operation);
+            operation = operations[Random.Range(0, operations.Length)];
+            formula2List.Add(operation);
+        }
+
+        // Concentate formulas into strings
+        formula1 = string.Join(" ", formula1List);
+        formula2 = string.Join(" ", formula2List);
     }
 
     /// <summary>
