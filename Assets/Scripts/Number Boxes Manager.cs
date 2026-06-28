@@ -23,7 +23,10 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private string formula2;
 
     [Header("Layout Groups")]
-    [SerializeField] private GameObject inputsLayout;
+    [SerializeField] private GameObject leftInputs;
+    [SerializeField] private GameObject bottomInputs;
+    [SerializeField] private GameObject leftLines;
+    [SerializeField] private GameObject bottomLines;
     [SerializeField] private GameObject ouputsLayout;
     [SerializeField] private GameObject answersLayout;
 
@@ -31,6 +34,8 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private InputNumberBox inputPrefab;
     [SerializeField] private OutputNumberBox outputPrefab;
     [SerializeField] private OutputNumberBox answerPrefab;
+    [SerializeField] private GameObject verticalLinePrefab;
+    [SerializeField] private GameObject horizontalLinePrefab;
 
     [Header("SFX")]
     [SerializeField] private AudioClip victorySFX;
@@ -62,12 +67,7 @@ public class NumberBoxesManager : MonoBehaviour
     /// </summary>
     public void InitBoxes(int difficulty)
     {
-        // Num of inputs is hacking level + 1
-        for (int i = 0; i < difficulty + 1; i++)
-        {
-            InputNumberBox newInput = Instantiate(inputPrefab, inputsLayout.transform);
-            inputs.Add(newInput);
-        }
+        InitInputBoxes(difficulty);
 
         for (int i = 0; i < 2; i++)
         {
@@ -85,6 +85,51 @@ public class NumberBoxesManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Private helper to handle initializing input boxes
+    /// </summary>
+    /// <param name="difficulty"></param>
+    private void InitInputBoxes(int difficulty)
+    {
+        int leftInputCount = 0;
+        int bottomInputCount = 0;
+
+        // Num of inputs is hacking level + 1
+        for (int i = 0; i < difficulty + 1; i++)
+        {
+            InputNumberBox newInput;
+
+            // If one layout is already full of inputs, add the remaining input boxes to the other one
+            if (leftInputCount == 3)
+            {
+                newInput = Instantiate(inputPrefab, bottomInputs.transform);
+                Instantiate(verticalLinePrefab, bottomLines.transform);
+                bottomInputCount++;
+            }
+            else if (bottomInputCount == 3)
+            {
+                newInput = Instantiate(inputPrefab, leftInputs.transform);
+                Instantiate(horizontalLinePrefab, leftLines.transform);
+                leftInputCount++;
+            }
+            // If both have space, randomly add input box to one of them
+            else if (Random.Range(0, 2) == 1)
+            {
+                newInput = Instantiate(inputPrefab, bottomInputs.transform);
+                Instantiate(verticalLinePrefab, bottomLines.transform);
+                bottomInputCount++;
+            }
+            else
+            {
+                newInput = Instantiate(inputPrefab, leftInputs.transform);
+                Instantiate(horizontalLinePrefab, leftLines.transform);
+                leftInputCount++;
+            }
+
+            inputs.Add(newInput);
+        }
+    }
+
+    /// <summary>
     /// Randomly generates the 2 formulas that produce the 2 target outputs according to given difficulty
     /// </summary>
     /// <param name="difficulty"></param>
@@ -93,7 +138,7 @@ public class NumberBoxesManager : MonoBehaviour
         // Generate random nums for the correct inputs
         for (int i = 0; i < difficulty + 1; i++)
         {
-            int num = Random.Range(0, 9);
+            int num = Random.Range(0, 10);
             correctNums.Add(num);
         }
 
@@ -172,6 +217,7 @@ public class NumberBoxesManager : MonoBehaviour
         {
             // Trigger win
             AudioManager.instance.PlaySoundFX(victorySFX, transform, 0.7f);
+            Debug.Log("Solved!");
         }
     }
 
