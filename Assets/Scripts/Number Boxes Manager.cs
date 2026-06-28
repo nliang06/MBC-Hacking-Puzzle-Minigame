@@ -99,13 +99,13 @@ public class NumberBoxesManager : MonoBehaviour
             InputNumberBox newInput;
 
             // If one layout is already full of inputs, add the remaining input boxes to the other one
-            if (leftInputCount == 3)
+            if (leftInputCount > bottomInputCount)
             {
                 newInput = Instantiate(inputPrefab, bottomInputs.transform);
                 Instantiate(verticalLinePrefab, bottomLines.transform);
                 bottomInputCount++;
             }
-            else if (bottomInputCount == 3)
+            else if (leftInputCount <= bottomInputCount)
             {
                 newInput = Instantiate(inputPrefab, leftInputs.transform);
                 Instantiate(horizontalLinePrefab, leftLines.transform);
