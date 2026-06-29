@@ -15,7 +15,6 @@ public class InputNumberBox : NumberBox, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-        UpdateNumber(Number = Random.Range(0, 9));
         isSolved = false;
     }
 

@@ -91,6 +91,8 @@ public class NumberBoxesManager : MonoBehaviour
         }
 
         GenerateFormulas(difficulty);
+        CalculateAnswers();
+        CalculateOuput();
     }
 
     /// <summary>
@@ -176,8 +178,6 @@ public class NumberBoxesManager : MonoBehaviour
         // Concentate formulas into strings
         formula1 = string.Join(" ", formula1List);
         formula2 = string.Join(" ", formula2List);
-
-        CalculateAnswers();
     }
 
     /// <summary>
