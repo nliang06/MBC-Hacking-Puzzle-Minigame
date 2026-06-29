@@ -5,11 +5,15 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
-
+    [Header("Audio Mixers + Players")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioSource soundFXPlayer;
+
+    [Header("SFX")]
     [SerializeField] private AudioClip buttonClickSFX;
+    [SerializeField] private AudioClip victorySFX;
+
+    public static AudioManager instance;
 
     // Uses singleton design pattern
     private void Awake()
@@ -17,6 +21,11 @@ public class AudioManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -28,23 +37,29 @@ public class AudioManager : MonoBehaviour
     /// <param name="volume">Volume to play audio clip at</param>
     public void PlaySoundFX(AudioClip audioClip, Transform spawnTransform, float volume)
     {
-        // Spawn audio source to play sound and assign audio clip accordingly
-        AudioSource audioSource = Instantiate(soundFXPlayer, spawnTransform.position, Quaternion.identity);
-        audioSource.clip = audioClip;
-        audioSource.volume = volume;
-        audioSource.Play();
+        //// Spawn audio source to play sound and assign audio clip accordingly
+        //AudioSource audioSource = Instantiate(soundFXPlayer, spawnTransform.position, Quaternion.identity);
+        //audioSource.clip = audioClip;
+        //audioSource.volume = volume;
+        //audioSource.Play();
 
-        // Destroy clip after finished playing
-        float clipLength = audioSource.clip.length;
-        Destroy(audioSource.gameObject, clipLength);
+        //// Destroy clip after finished playing
+        //float clipLength = audioSource.clip.length;
+        //Destroy(audioSource.gameObject, clipLength);
+
+        soundFXPlayer.PlayOneShot(audioClip);
+        Debug.Log("Playing sound");
     }
 
-    /// <summary>
-    /// Play button click sound
-    /// </summary>
     public void PlayButtonClickSound()
     {
         // Spawn game object to play sound and assign audio clip accordingly
         PlaySoundFX(buttonClickSFX, transform, 1f);
+    }
+
+    public void PlayVictorySound()
+    {
+        // Spawn game object to play sound and assign audio clip accordingly
+        PlaySoundFX(victorySFX, transform, 0.7f);
     }
 }

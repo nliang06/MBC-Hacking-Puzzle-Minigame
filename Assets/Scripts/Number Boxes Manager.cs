@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class NumberBoxesManager : MonoBehaviour
 {
     public int difficultyLevel;
+
+    public delegate void OnSolve();
+    public static event OnSolve onSolve;
 
     [Header("Number Boxes")]
     [SerializeField] private List<InputNumberBox> inputs;
@@ -22,6 +26,9 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private string formula1;
     [SerializeField] private string formula2;
 
+    [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI hackLevelText;
+
     [Header("Layout Groups")]
     [SerializeField] private GameObject leftInputs;
     [SerializeField] private GameObject bottomInputs;
@@ -37,9 +44,6 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private GameObject verticalLinePrefab;
     [SerializeField] private GameObject horizontalLinePrefab;
 
-    [Header("SFX")]
-    [SerializeField] private AudioClip victorySFX;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -51,9 +55,6 @@ public class NumberBoxesManager : MonoBehaviour
         formula2List = new List<char>();
         operations1 = new List<char>();
         operations2 = new List<char>();
-
-        // test set up of number boxes
-        InitBoxes(difficultyLevel);
     }
 
     private void OnEnable()
@@ -62,11 +63,19 @@ public class NumberBoxesManager : MonoBehaviour
         InputNumberBox.onChangeNumber += CalculateOuput;
     }
 
+    private void OnDisable()
+    {
+        // Observe input number boxes for when to update the ouputs
+        InputNumberBox.onChangeNumber -= CalculateOuput;
+    }
+
     /// <summary>
     /// Initialize layout for the given difficulty level
     /// </summary>
     public void InitBoxes(int difficulty)
     {
+        hackLevelText.text = $"Level {difficulty} Hack";
+
         InitInputBoxes(difficulty);
 
         for (int i = 0; i < 2; i++)
@@ -196,7 +205,8 @@ public class NumberBoxesManager : MonoBehaviour
     /// </summary>
     public void CalculateOuput()
     {
-        AudioManager.instance.PlayButtonClickSound();
+        Debug.Log("Calculated output");
+
         // Use first variable (i.e A) as starting value
         int output1 = inputs[0].Number;
         int output2 = inputs[0].Number;
@@ -213,10 +223,10 @@ public class NumberBoxesManager : MonoBehaviour
         outputs[1].UpdateNumber(output2);
 
         // Check if outputs match the answers
-        if (output1 == answer1 && output2 == answer2)
+        if (outputs[0].Number == answer1 && outputs[1].Number == answer2)
         {
             // Trigger win
-            AudioManager.instance.PlaySoundFX(victorySFX, transform, 0.7f);
+            onSolve?.Invoke();
             Debug.Log("Solved!");
         }
     }

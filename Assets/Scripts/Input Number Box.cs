@@ -20,6 +20,8 @@ public class InputNumberBox : NumberBox, IPointerClickHandler
     /// </summary>
     public void IncrementNumber()
     {
+        AudioManager.instance.PlayButtonClickSound();
+
         // Overflow back to 0
         if (Number == 9)
         {
@@ -38,6 +40,8 @@ public class InputNumberBox : NumberBox, IPointerClickHandler
     /// </summary>
     public void DecrementNumber()
     {
+        AudioManager.instance.PlayButtonClickSound();
+
         // Underflow up to 9
         if (Number == 0)
         {
