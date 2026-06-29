@@ -3,16 +3,41 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class InputNumberBox : NumberBox, IPointerClickHandler
 {
     public delegate void OnChangeNumber();
     public static event OnChangeNumber onChangeNumber;
 
+    private bool isSolved;
+
     // Start is called before the first frame update
     void Start()
     {
         UpdateNumber(Number = Random.Range(0, 9));
+        isSolved = false;
+    }
+
+    private void OnEnable()
+    {
+        // Observe for correct solve
+        NumberBoxesManager.onSolve += DisableInput;
+    }
+
+    private void OnDisable()
+    {
+        // Observe for correct solve
+        NumberBoxesManager.onSolve -= DisableInput;
+    }
+
+    /// <summary>
+    /// Stop player from changing inputs
+    /// </summary>
+    private void DisableInput()
+    {
+        gameObject.GetComponent<Button>().enabled = false;
+        isSolved = true;
     }
 
     /// <summary>
@@ -61,7 +86,7 @@ public class InputNumberBox : NumberBox, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right && !isSolved)
             DecrementNumber();
     }
 }

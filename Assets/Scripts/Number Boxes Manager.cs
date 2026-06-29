@@ -5,8 +5,7 @@ using TMPro;
 
 public class NumberBoxesManager : MonoBehaviour
 {
-    public int difficultyLevel;
-
+    #region Fields
     public delegate void OnSolve();
     public static event OnSolve onSolve;
 
@@ -43,6 +42,7 @@ public class NumberBoxesManager : MonoBehaviour
     [SerializeField] private OutputNumberBox answerPrefab;
     [SerializeField] private GameObject verticalLinePrefab;
     [SerializeField] private GameObject horizontalLinePrefab;
+    #endregion
 
     // Start is called before the first frame update
     void Start()

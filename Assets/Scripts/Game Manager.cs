@@ -5,12 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static int difficultyLevel;
+
     [SerializeField] private NumberBoxesManager numberBoxesManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        numberBoxesManager.InitBoxes(Random.Range(1,5));
+        numberBoxesManager.InitBoxes(difficultyLevel);
     }
 
     private void OnEnable()
@@ -32,11 +34,13 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Restart the game and generate a new hack
+    /// Restart the game and generate a new hack with given difficulty level
     /// </summary>
-    public void StartNewGame()
+    public void StartNewGame(int difficulty)
     {
+        AudioManager.instance.PlayButtonClickSound();
         Debug.Log("Restarting");
+        difficultyLevel = difficulty;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
