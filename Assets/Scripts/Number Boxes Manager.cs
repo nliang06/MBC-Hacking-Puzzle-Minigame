@@ -27,6 +27,8 @@ public class NumberBoxesManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI hackLevelText;
+    [SerializeField] private TextMeshProUGUI formula1Text;
+    [SerializeField] private TextMeshProUGUI formula2Text;
 
     [Header("Layout Groups")]
     [SerializeField] private GameObject leftInputs;
@@ -153,6 +155,13 @@ public class NumberBoxesManager : MonoBehaviour
             correctNums.Add(num);
         }
 
+        // Adds opening brackets for the text display of the formulas
+        for (int i = 0; i < difficulty; i++)
+        {
+            formula1 += "(";
+            formula2 += "(";
+        }
+
         char[] operations = { '+', '-', '*' };
 
         // Hack difficulty determines range of coefficients each variable can have
@@ -168,10 +177,15 @@ public class NumberBoxesManager : MonoBehaviour
             formula1 += coefficient1.ToString();
             formula2 += coefficient2.ToString();
 
-            // Add variable to formula string
+            // Add variable to formula string with closing bracket for the text (if necessary)
             char variable = (char)((int)'A' + i);
             formula1 += variable.ToString();
             formula2 += variable.ToString();
+            if (i != 0)
+            {
+                formula1 += ")";
+                formula2 += ")";
+            }
 
             // Stops adding unnecessary operator after last variable
             if (i == difficulty) break;
@@ -260,5 +274,29 @@ public class NumberBoxesManager : MonoBehaviour
                 Debug.Log("Invalid operation");
                 return 0;
         }
+    }
+
+    /// <summary>
+    /// Toggle visibility of 1st formula for the hack
+    /// </summary>
+    public void ToggleFormula1Visibility()
+    {
+        if (formula1Text.text == "Show Formula")
+            formula1Text.text = formula1;
+        else
+            formula1Text.text = "Show Formula";
+        AudioManager.instance.PlayButtonClickSound();
+    }
+
+    /// <summary>
+    /// Toggle visibility of 2nd formula for the hack
+    /// </summary>
+    public void ToggleFormula2Visibility()
+    {
+        if (formula2Text.text == "Show Formula")
+            formula2Text.text = formula2;
+        else
+            formula2Text.text = "Show Formula";
+        AudioManager.instance.PlayButtonClickSound();
     }
 }
