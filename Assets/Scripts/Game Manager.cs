@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,10 +10,20 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private NumberBoxesManager numberBoxesManager;
 
+    [Header("Line Colours")]
+    [SerializeField] private Color unsolvedColour;
+    [SerializeField] private Color solvedColour;
+
+    [Header("UI References")]
+    [SerializeField] private Image line1;
+    [SerializeField] private Image line2;
+
     // Start is called before the first frame update
     void Start()
     {
         numberBoxesManager.InitBoxes(difficultyLevel);
+        line1.color = unsolvedColour;
+        line2.color = unsolvedColour;
     }
 
     private void OnEnable()
@@ -50,5 +61,7 @@ public class GameManager : MonoBehaviour
     private void TriggerVictory()
     {
         AudioManager.instance.PlayVictorySound();
+        line1.color = solvedColour;
+        line2.color = solvedColour;
     }
 }

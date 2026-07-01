@@ -986,6 +986,8 @@ MonoBehaviour:
   correctNums: 
   operations1: 
   operations2: 
+  coefficients1: 
+  coefficients2: 
   formula1: 
   formula2: 
   hackLevelText: {fileID: 329745801}
@@ -3334,6 +3336,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberBoxesManager: {fileID: 688458124}
+  unsolvedColour: {r: 1, g: 0, b: 0, a: 1}
+  solvedColour: {r: 0, g: 0.9921569, b: 0, a: 1}
+  line1: {fileID: 1292185639}
+  line2: {fileID: 1766621271}
 --- !u!1 &1896958717
 GameObject:
   m_ObjectHideFlags: 0

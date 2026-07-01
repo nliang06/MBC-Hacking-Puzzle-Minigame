@@ -18,8 +18,6 @@ public class NumberBoxesManager : MonoBehaviour
 
     [Header("Formulas Info")]
     [SerializeField] private List<int> correctNums;
-    private List<char> formula1List;
-    private List<char> formula2List;
     [SerializeField] private List<char> operations1;
     [SerializeField] private List<char> operations2;
     [SerializeField] private List<int> coefficients1;
@@ -53,8 +51,6 @@ public class NumberBoxesManager : MonoBehaviour
         outputs = new List<OutputNumberBox>();
         answers = new List<OutputNumberBox>();
         correctNums = new List<int>();
-        formula1List = new List<char>();
-        formula2List = new List<char>();
         operations1 = new List<char>();
         operations2 = new List<char>();
         coefficients1 = new List<int>();
@@ -176,8 +172,6 @@ public class NumberBoxesManager : MonoBehaviour
             char variable = (char)((int)'A' + i);
             formula1 += variable.ToString();
             formula2 += variable.ToString();
-            //formula1List.Add(variable);
-            //formula2List.Add(variable);
 
             // Stops adding unnecessary operator after last variable
             if (i == difficulty) break;
@@ -191,10 +185,6 @@ public class NumberBoxesManager : MonoBehaviour
             formula2 += $" {operation} ";
             operations2.Add(operation);
         }
-
-        // Concentate formulas into strings
-        //formula1 = string.Join(" ", formula1List);
-        //formula2 = string.Join(" ", formula2List);
     }
 
     /// <summary>
