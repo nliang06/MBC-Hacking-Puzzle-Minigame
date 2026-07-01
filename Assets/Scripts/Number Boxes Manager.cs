@@ -22,8 +22,10 @@ public class NumberBoxesManager : MonoBehaviour
     private List<char> formula2List;
     [SerializeField] private List<char> operations1;
     [SerializeField] private List<char> operations2;
-    [SerializeField] private string formula1;
-    [SerializeField] private string formula2;
+    [SerializeField] private List<int> coefficients1;
+    [SerializeField] private List<int> coefficients2;
+    [SerializeField] private string formula1 = "";
+    [SerializeField] private string formula2 = "";
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI hackLevelText;
@@ -55,6 +57,8 @@ public class NumberBoxesManager : MonoBehaviour
         formula2List = new List<char>();
         operations1 = new List<char>();
         operations2 = new List<char>();
+        coefficients1 = new List<int>();
+        coefficients2 = new List<int>();
     }
 
     private void OnEnable()
@@ -155,29 +159,42 @@ public class NumberBoxesManager : MonoBehaviour
 
         char[] operations = { '+', '-', '*' };
 
+        // Hack difficulty determines range of coefficients each variable can have
+        int coefficientsMaxRange = 2 * difficulty;
+
         for (int i = 0; i < difficulty + 1; i++)
         {
+            // Add random coefficient to each variable
+            int coefficient1 = Random.Range(1, coefficientsMaxRange);
+            int coefficient2 = Random.Range(1, coefficientsMaxRange);
+            coefficients1.Add(coefficient1);
+            coefficients2.Add(coefficient2);
+            formula1 += coefficient1.ToString();
+            formula2 += coefficient2.ToString();
+
             // Add variable to formula string
             char variable = (char)((int)'A' + i);
-            formula1List.Add(variable);
-            formula2List.Add(variable);
+            formula1 += variable.ToString();
+            formula2 += variable.ToString();
+            //formula1List.Add(variable);
+            //formula2List.Add(variable);
 
             // Stops adding unnecessary operator after last variable
             if (i == difficulty) break;
 
             // Add random operation after variable and re-randomize for the 2nd formula
             char operation = operations[Random.Range(0, operations.Length)];
-            formula1List.Add(operation);
+            formula1 += $" {operation} ";
             operations1.Add(operation);
 
             operation = operations[Random.Range(0, operations.Length)];
-            formula2List.Add(operation);
+            formula2 += $" {operation} ";
             operations2.Add(operation);
         }
 
         // Concentate formulas into strings
-        formula1 = string.Join(" ", formula1List);
-        formula2 = string.Join(" ", formula2List);
+        //formula1 = string.Join(" ", formula1List);
+        //formula2 = string.Join(" ", formula2List);
     }
 
     /// <summary>
@@ -192,8 +209,8 @@ public class NumberBoxesManager : MonoBehaviour
         // Applies operations left to right (so no BEDMAS) according to operations lists for the 2 formulas
         for (int i = 0; i < correctNums.Count - 1; i++)
         {
-            answer1 = ApplyOperation(correctNums[i + 1], answer1, operations1[i]);
-            answer2 = ApplyOperation(correctNums[i + 1], answer2, operations2[i]);
+            answer1 = ApplyOperation(correctNums[i + 1], answer1, operations1[i], coefficients1[i + 1]);
+            answer2 = ApplyOperation(correctNums[i + 1], answer2, operations2[i], coefficients2[i + 1]);
         }
 
         answers[0].UpdateNumber(answer1);
@@ -208,14 +225,14 @@ public class NumberBoxesManager : MonoBehaviour
         Debug.Log("Calculated output");
 
         // Use first variable (i.e A) as starting value
-        int output1 = inputs[0].Number;
-        int output2 = inputs[0].Number;
+        int output1 = inputs[0].Number * coefficients1[0];
+        int output2 = inputs[0].Number * coefficients2[0];
 
         // Applies operations left to right (so no BEDMAS) according to operations lists for the 2 formulas
         for (int i = 0; i < inputs.Count - 1; i++)
         {
-            output1 = ApplyOperation(inputs[i + 1].Number, output1, operations1[i]);
-            output2 = ApplyOperation(inputs[i + 1].Number, output2, operations2[i]);
+            output1 = ApplyOperation(inputs[i + 1].Number, output1, operations1[i], coefficients1[i + 1]);
+            output2 = ApplyOperation(inputs[i + 1].Number, output2, operations2[i], coefficients2[i + 1]);
         }
 
         // Update visuals
@@ -237,17 +254,18 @@ public class NumberBoxesManager : MonoBehaviour
     /// <param name="variable">variable to apply operation to</param>
     /// <param name="resultSoFar">result from previous operations</param>
     /// <param name="operation">the operation to apply</param>
+    /// <param name="coefficient">coefficient of variable</param>
     /// <returns></returns>
-    private int ApplyOperation(int variable, int resultSoFar, char operation)
+    private int ApplyOperation(int variable, int resultSoFar, char operation, int coefficient)
     {
         switch(operation)
         {
             case '+':
-                return resultSoFar + variable;
+                return resultSoFar + (coefficient * variable);
             case '-':
-                return resultSoFar - variable;
+                return resultSoFar - (coefficient * variable);
             case '*':
-                return resultSoFar * variable;
+                return resultSoFar * (coefficient * variable);
             default:
                 Debug.Log("Invalid operation");
                 return 0;

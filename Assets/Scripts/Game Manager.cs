@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static int difficultyLevel;
+    public static int difficultyLevel = 1;
 
     [SerializeField] private NumberBoxesManager numberBoxesManager;
 
